@@ -25,9 +25,6 @@ maotai_data_3Day <- w.wsd(codes='600519.SH',fields = 'CLOSE,HIGH,LOW,OPEN',begin
 ## 日截面
 ## wdata<-w.wss（codes, fields, ..., options）
 
-codes='600000.SH,000002.SZ,000009.SZ,000012.SZ,000021.SZ';
-fields='comp_name,comp_name_eng,ipo_date,float_a_shares,mf_amt,mf_vol';
-
 wdata_test<-w.wss(c('600000.SH,000002.SZ,000009.SZ,000012.SZ,000021.SZ'),fields = c('comp_name,comp_name_eng,ipo_date,float_a_shares,mf_amt,mf_vol'),tradedate='20210507');
 
 
@@ -38,6 +35,9 @@ wdata_test2 = w.wsi(codes = 'IF00.CFE',fields = 'open,high,low,close',begintime 
 
 ## 获取全球宏观经济数据函数EDB
 ## wdata<-w.edb(codes, beginTime, endTime, options)
+
+xx_test <- w.edb('M1002661','2021-01-01','') 
+ggplot(data= NULL, aes(x = xx_test$Data$DATETIME, y = xx_test$Data$CLOSE)) + geom_point(color = "orange")+xlab('')+ylab('')+labs(title = "国债即期收益率：6个月")
 
 ```
 
