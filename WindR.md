@@ -19,14 +19,14 @@ duanxz
 | **WSET** | 数据集：获取板块成分、指数成分以及各证券品种的专题统计报表数据 | 停牌、复牌股票:一次最长获取一个月时间段内的数据;分红送转:一次最长获取10年时间段内的数据;期货合约持仓排名:一次最长获取一个月时间段内的数据 | --               |
 | **EDB**  | 经济数据：获取宏观经济数据                                   | --                                                           | 每次限8000单元格 |
 
-### 常见乱码问题
+## 常见乱码问题
 
 * Excel中，在to_csv（）中pd.read_csv(--------, encoding='utf-8')，如果乱码，可以换**utf_8_sig**，或者**gb18030**；
 * 需要注意获取wind数据时的编码格式和数据库存储标准内的代码格式；
 
 
 
-### 报错代码code对应解释
+## 报错代码code对应解释
 
 | ErrCode   | ErrMsg                        |
 | --------- | ----------------------------- |
@@ -184,6 +184,61 @@ unclass(as.POSIXlt(now))
 ### python
 ```
 
+**pandas可以to_json()，也支持直接to_sql()进入数据库**
+
+参考：[在pandas.DataFrame.to_sql时指定数据库表的列类型](https://www.jianshu.com/p/4c5e1ebe8470)
+
+```
+## 存储为json的方法：先构造df，然后利用panda库的to_json函数
+
+[pandas 之 DataFrame 保存为文件df.to_csv、df.to_json、df.to_html、df.to_excel](https://blog.csdn.net/tz_zs/article/details/81137998)
+
+[to_json的官方文档](https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.to_json.html)
+
+[中文乱码出现时](https://blog.csdn.net/FontThrone/article/details/75212825)
+```
+
+```
+## json的读写
+## JSON在python中分别由list和dict组成。
+
+with open("../config/record.json","w") as dump_f:
+    json.dump(load_dict, dump_f)
+    
+with open("../config/record.json",'r') as load_f:
+    load_dict = json.load(load_f)
+
+#print(load_dict)
+```
+
+
+
+
+
+
+
+
+
+```
+### 策略实现案例（期货）
+双均线策略（均线穿梭生成的买卖时机获取）
+dual thrust（通道突破原则）
+R-breaker（日内交易，主要策略为趋势跟随和趋势反转）
+alpha对冲
+网格交易
+跨品种套利
+跨期套利
+做市商交易
+海龟交易法
+
+## 原始来源：
+https://blog.csdn.net/u011078141/article/details/89453203
+## 该博主的个人代码分享页面：
+https://www.myquant.cn/docs/python_strategyies/153
+```
+
+[策略实现案例](https://www.myquant.cn/docs/python_strategyies/153)
+
 
 
 ```
@@ -215,23 +270,23 @@ data.columns=['stkcd','evendate']
 df = pd.DataFrame(np.transpose(totalist), columns=['stkcd', '证券名称', '收盘价', '涨跌幅', '交易日期'])
 print(df)
 df.to_csv("Y:\\个股日交易数据.csv", sep=',', mode='a',encoding='gb18030')
-
-
 ```
-
-
 
 ```
 ## 获取全体非停牌和st的a股代码
-
 import pandasas pd
 import numpyas np
 import datetime
 from WindPy import *
 
-#获取当天时间
+## 获取当天时间
 date = datetime.today()
 
+## 定义路径，判断不存在则新建
+folder_target = "C:\\stocks\\"
+if os.path.exists(folder_target) == False:
+    os.mkdir(folder_target)
+    
 #1.获取全部a股数据
 all_a = w.wset("SectorConstituent",date = date ,sector=u"全部A股")
 
@@ -240,26 +295,49 @@ all_Code = list(pd.Series(all_a.Data[1]))#获取的是列表数据
 
 #2.获取当天所有停牌股票信息
 all_tp = w.wset("TradeSuspend",startdate = date,enddate = date,field = "wind_code,sec_name,suspend_type,suspend_reason")
-
 all_tp_code = list(pd.Series(all_tp.Data[0]))
 
 #3.剔除ST
 all_st = w.wset("SectorConstituent",date=date,sector=u"风险警示股票",field="wind_code,sec_name")
-
 all_st_code = list(pd.Series(all_st.Data[0]))
 
 #4.获取当天剔除ST和停牌的全部A股代码
 all_Code = set(all_Code)
-
 all_st_code =  set(all_st_code)
-
 all_tp_code = set(all_tp_code)
 
 code = all_Code - all_tp_code - all_st_code
 
 #再将code转换为列表形式
-
 code = list(code)
 print(code)
 ```
+
+```
+## w.wsd()数据并转化成dataframe格式
+wsd_data=w.wsd("510050.SH", "close,NAV_acc", "2005-02-23", "2017-07-11", "")
+ 
+fm=pd.DataFrame(wsd_data.Data,index=wsd_data.Fields,columns=wsd_data.Times)
+
+#转置
+fm=fm.T 
+```
+
+### Wind的实时行情API的使用WSQ
+
+参考: [Wind的实时行情API的使用](https://blog.csdn.net/qtlyx/article/details/107291342?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522162130303416780366595177%2522%252C%2522scm%2522%253A%252220140713.130102334.pc%255Fall.%2522%257D&request_id=162130303416780366595177&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~first_rank_v2~rank_v29-17-107291342.first_rank_v2_pc_rank_v29&utm_term=Wind%E9%87%8F%E5%8C%96&spm=1018.2226.3001.4187)
+
+Wind的实时行情是通过**回调函数**来实现的。也就是大框架下，我们是让主程序一直while循环，然后有新的行情到来的时候，wind的API会自动调用我们写好的回调函数。
+
+    if __name__ == '__main__':
+     
+        w.wsq("000002.SZ,2202.HK",
+                  "rt_date,rt_time,rt_last,rt_ask1,rt_bid1,rt_asize1,rt_bsize1", func=AH_raio_calculatte)
+        while True:
+            pass
+首先，在主程序里面，很明显，就是设置好我们需要的行情内容。
+
+设置完需要的数据和回调函数的名称之后，就把主线程打入死循环即可。例子中func_name：AH_raio_calculatte；
+
+在新的行情到来的时候，wind会自动把新的行情数据传递给我们的回调函数，我们的函数要做的事情就是解析一下回调函数中的数据，并实现自己想要的功能。
 
