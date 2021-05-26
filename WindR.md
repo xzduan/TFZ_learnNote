@@ -5,7 +5,7 @@ duanxz
 20210508 10:04
 ```
 
-
+## Wind跨语言通用函数简介
 
 | 函数     | 功能                                                         | 说明                                                         | 限制             |
 | -------- | ------------------------------------------------------------ | ------------------------------------------------------------ | ---------------- |
@@ -118,6 +118,17 @@ duanxz
 ### 如果wind的代码生成器（cg）无法打开，点开任务管理器关闭“WindNavigator”进程后，再重新打开
 ```
 
+```
+## 读数据
+dataTest210524 <- read.table(file = "smpp210524.txt",header=FALSE,sep=' ',na.strings = c("NA"),fileEncoding = 'utf-8')
+##
+colnames(dataTest210524)<- c('name','total','recent_1Y','drawdown')
+
+ggplot(data=dataTest210524,aes(x=drawdown,y=total))+geom_point(aes(col=factor(name),size=1.2))  +geom_smooth(method="lm",se=T)
+
+
+```
+
 
 
 
@@ -182,7 +193,11 @@ unclass(as.POSIXlt(now))
 
 ```
 ### python
+# jupyter中pip新的包时，前面加个感叹既可
+! pip install schedule
 ```
+
+### 数据格式的互相转换和读写
 
 **pandas可以to_json()，也支持直接to_sql()进入数据库**
 
@@ -211,13 +226,61 @@ with open("../config/record.json",'r') as load_f:
 #print(load_dict)
 ```
 
+| Python                                 | JSON   |
+| -------------------------------------- | --------------- |
+| dict                                   | object |
+| list, tuple                            | array  |
+| str                                    | string |
+| int, float, int- & float-derived Enums | number |
+| True                                   | true   |
+| False                                  | false  |
+| None                                   | null   |
+
+```
+## 读取txt和写csv
+import pandas as pd
+from WindPy import *
+from datetime import *
+import time
+import numpy as np
+
+data = pd.read_table('C:\\getpricelist.txt',header=None,encoding='gb2312',delim_whitespace=True)
+data.columns=['stkcd','evendate']
+
+df = pd.DataFrame(np.transpose(totalist), columns=['stkcd', '证券名称', '收盘价', '涨跌幅', '交易日期'])
+print(df)
+df.to_csv("Y:\\个股日交易数据.csv", sep=',', mode='a',encoding='gb18030')
+```
+
+### 文件处理和判断
+
+```
+# 判断文件 / 文件夹是否存在
+os.path.exists() 
+#方法用于检验文件 / 文件夹是否存在。
+
+# 判断文件是否为空
+os.path.getsize() 
+#返回文件的字节数，如果为 0，则代表空。
+```
+
+```
+# 注释
+'''
+ 注释
+'''
+
+# 字符串操作——截取掉后3位
+tempStr[:-3]
+```
+
+### 定时函数
+
+![Python 定时任务的实现方式](https://blog.csdn.net/songlh1234/article/details/82352306?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522162158409216780357273095%2522%252C%2522scm%2522%253A%252220140713.130102334..%2522%257D&request_id=162158409216780357273095&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~sobaiduend~default-2-82352306.first_rank_v2_pc_rank_v29&utm_term=Python%E5%AE%9A%E6%97%B6&spm=1018.2226.3001.4187)
 
 
 
-
-
-
-
+### 策略的实现和一些基本的Wind函数实操
 
 ```
 ### 策略实现案例（期货）
@@ -256,21 +319,7 @@ AllAStock =w.wet("SectorConstituent","date=20210517;sectorld=a001010100000000;fi
 with open('AllAStock.json',mode='w') as f2:json.dump(AllAStock.Data[0],f2);
 ```
 
-```
-## 读取txt和写csv
-import pandas as pd
-from WindPy import *
-from datetime import *
-import time
-import numpy as np
 
-data = pd.read_table('C:\\getpricelist.txt',header=None,encoding='gb2312',delim_whitespace=True)
-data.columns=['stkcd','evendate']
-
-df = pd.DataFrame(np.transpose(totalist), columns=['stkcd', '证券名称', '收盘价', '涨跌幅', '交易日期'])
-print(df)
-df.to_csv("Y:\\个股日交易数据.csv", sep=',', mode='a',encoding='gb18030')
-```
 
 ```
 ## 获取全体非停牌和st的a股代码
