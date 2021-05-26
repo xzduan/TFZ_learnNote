@@ -88,5 +88,9 @@ git config --global user.email <邮箱地址>
 
 [git基础命令](https://www.jianshu.com/p/93318220cdce)
 
+```
+另需注意.gitignore的使用
+```
+
 
 
