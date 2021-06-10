@@ -27,7 +27,9 @@ duanxz
 * 郑州商品交易所：
   强麦WH、普麦PM、棉花CF、白糖SR、精对苯二甲酸PTA、菜籽油OI、早籼稻RI、甲醇ME、新甲醇MA、玻璃FG、菜籽RS、菜粕RM、动力煤TC、锰铁SF、硅铁SM、晚籼稻LR、粳稻JR等
 
+### 允许交易时间
 
+![](https://pic2.zhimg.com/80/v2-bd78c97a518029025ceb03b4567d0afd_720w.jpg)
 
 
 
