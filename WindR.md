@@ -251,6 +251,14 @@ df = pd.DataFrame(np.transpose(totalist), columns=['stkcd', '证券名称', '收
 print(df)
 df.to_csv("Y:\\个股日交易数据.csv", sep=',', mode='a',encoding='gb18030')
 ```
+### 纯文本文件的写入(txt)
+
+```
+# 此方法的缺点是：如果range()的大小十分恐怖，会因为大量的文件读取操作而特别慢
+for tempIndex in range(100):
+    with open('test.txt','a') as file0:
+        print('|close|%s |自己|%s |他人|%s |差值| %s' %(tempIndex,tempIndex+1,tempIndex+2,1),file=file0)
+```
 
 ### 文件处理和判断
 
@@ -276,7 +284,7 @@ tempStr[:-3]
 
 ### 定时函数
 
-![Python 定时任务的实现方式](https://blog.csdn.net/songlh1234/article/details/82352306?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522162158409216780357273095%2522%252C%2522scm%2522%253A%252220140713.130102334..%2522%257D&request_id=162158409216780357273095&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~sobaiduend~default-2-82352306.first_rank_v2_pc_rank_v29&utm_term=Python%E5%AE%9A%E6%97%B6&spm=1018.2226.3001.4187)
+[Python 定时任务的实现方式](https://blog.csdn.net/songlh1234/article/details/82352306?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522162158409216780357273095%2522%252C%2522scm%2522%253A%252220140713.130102334..%2522%257D&request_id=162158409216780357273095&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~sobaiduend~default-2-82352306.first_rank_v2_pc_rank_v29&utm_term=Python%E5%AE%9A%E6%97%B6&spm=1018.2226.3001.4187)
 
 
 
